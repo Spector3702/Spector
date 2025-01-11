@@ -23,7 +23,7 @@ os.environ['TAVILY_API_KEY'] = "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"
 question_router = create_question_router()
 
 vector_store = create_vectorstore()
-web_search_tool = TavilySearchResults()
+web_search_tool = TavilySearchResults(include_domains=["https://www.leagueoflegends.com/zh-tw/champions/"])
 plain = create_plain_llm()
 
 rag_grader = create_rag_grader()
@@ -201,7 +201,7 @@ workflow.add_edge("plain_answer", END)
 memory = MemorySaver()
 app = workflow.compile(checkpointer=memory)
 
-inputs = {"question": "女友肚子痛怎麼辦？"}
+inputs = {"question": "阿卡利的技能是什麼？"}
 config = {"configurable": {"thread_id": "abc123"}}
 
 for output in app.stream(inputs, config):
