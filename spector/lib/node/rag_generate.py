@@ -1,6 +1,6 @@
 from langchain_core.output_parsers import StrOutputParser
 
-from spector.lib.base_node import BaseNode
+from spector.lib.node.base_node import BaseNode
 
 class RagGenerateNode(BaseNode):
     def __init__(self, model, temperature):

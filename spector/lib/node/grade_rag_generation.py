@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-from spector.lib.base_node import BaseNode
+from spector.lib.node.base_node import BaseNode
 
 
 class GradeHallucinations(BaseModel):
