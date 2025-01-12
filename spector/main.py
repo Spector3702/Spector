@@ -8,15 +8,17 @@ from langgraph.graph import END, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
 
 from lib.route_question import route_question
-from lib.web_search import web_search
+from lib.web_search import WebSearchNode
 from lib.retrieve import retrieve
-from lib.retrieval_grade import retrieval_grade
+from lib.retrieval_grade import RagGraderNode
 from lib.route_rag import route_rag
-from lib.rag_generate import rag_generate
-from lib.grade_rag_generation import grade_rag_generation
+from lib.rag_generate import RagGenerateNode
+from lib.grade_rag_generation import RagGenerationGraderNode
 from lib.plain_answer import plain_answer
 
 
+MODEL = 'gpt-4o-mini'
+TEMPERATURE = 0
 class GraphState(TypedDict):
     question : str
     generation : str
@@ -25,11 +27,16 @@ class GraphState(TypedDict):
 
 workflow = StateGraph(GraphState)
 
-workflow.add_node("web_search", web_search)
+web_search_node = WebSearchNode()
+workflow.add_node("web_search", web_search_node.execute)
 workflow.add_node("retrieve", retrieve)
-workflow.add_node("retrieval_grade", retrieval_grade)
-workflow.add_node("rag_generate", rag_generate)
 workflow.add_node("plain_answer", plain_answer)
+
+rag_grader_node = RagGraderNode(MODEL, TEMPERATURE)
+workflow.add_node("rag_grader", rag_grader_node.execute)
+
+rag_generate_node = RagGenerateNode(MODEL, TEMPERATURE)
+workflow.add_node("rag_generate", rag_generate_node.execute)
 
 workflow.set_conditional_entry_point(
     route_question,
@@ -39,19 +46,21 @@ workflow.set_conditional_entry_point(
         "plain_answer": "plain_answer",
     },
 )
-workflow.add_edge("retrieve", "retrieval_grade")
-workflow.add_edge("web_search", "retrieval_grade")
+workflow.add_edge("retrieve", "rag_grader")
+workflow.add_edge("web_search", "rag_grader")
 workflow.add_conditional_edges(
-    "retrieval_grade",
+    "rag_grader",
     route_rag,
     {
         "web_search": "web_search",
         "rag_generate": "rag_generate",
     },
 )
+
+rag_generation_grader = RagGenerationGraderNode(MODEL, TEMPERATURE)
 workflow.add_conditional_edges(
     "rag_generate",
-    grade_rag_generation,
+    rag_generation_grader.execute,
     {
         "not supported": "rag_generate", # Hallucinations: re-generate
         "not useful": "web_search", # Fails to answer question: fall-back to web-search
