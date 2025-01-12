@@ -14,7 +14,9 @@ class RouteQuestionNode(BaseNode):
     def __init__(self, model, temperature):
         instruction = """
         你是將使用者問題導向向量資料庫或網路搜尋的專家。
-        向量資料庫包含有關愛情文件。對於這些主題的問題，請使用向量資料庫工具。其他情況則使用網路搜尋工具。
+        向量資料庫包含有關愛情文件，對於這些主題的問題，請使用向量資料庫工具。
+        網路搜尋包含有關英雄聯盟（一款遊戲）的相關資訊，對於這些主題的問題，請使用網路搜尋工具。
+        其他情況則不使用工具。
         """
         templates = [
             ("system",instruction),
