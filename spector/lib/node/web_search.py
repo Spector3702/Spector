@@ -12,8 +12,9 @@ class WebSearchNode():
         print("---WEB SEARCH---")
         question = state["question"]
         documents = state.get("documents", [])
+        query = question[-1].content
 
-        docs = self.web_search_tool.invoke({"query": question})
+        docs = self.web_search_tool.invoke({"query": query})
         web_results = [Document(page_content=d["content"]) for d in docs]
 
         documents = documents + web_results

@@ -20,8 +20,7 @@ TEMPERATURE = 0
 
 
 class GraphState(TypedDict):
-    messages : Annotated[Sequence[BaseMessage], add_messages]
-    question : str
+    question : Annotated[Sequence[BaseMessage], add_messages]
     generation : str
     documents : List[str]
     
