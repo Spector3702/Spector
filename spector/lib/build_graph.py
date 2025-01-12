@@ -1,6 +1,8 @@
-from typing_extensions import TypedDict
-from typing import List
+from typing_extensions import TypedDict, Annotated
+from typing import List, Sequence
 from langgraph.graph import END, StateGraph
+from langgraph.graph.message import add_messages
+from langchain_core.messages import BaseMessage
 from langgraph.checkpoint.memory import MemorySaver
 
 from lib.node.route_question import RouteQuestionNode
@@ -18,7 +20,7 @@ TEMPERATURE = 0
 
 
 class GraphState(TypedDict):
-    question : str
+    question : Annotated[Sequence[BaseMessage], add_messages]
     generation : str
     documents : List[str]
     
