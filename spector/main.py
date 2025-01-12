@@ -14,7 +14,10 @@ class ChatModel(BaseModel):
 
 @app.post("/chat")
 def chat_endpoint(data: ChatModel):
-    inputs = {"question": data.question}
+    inputs = {
+        "question": data.question,
+        "messages": data.question
+    }
     config = {"configurable": {"thread_id": data.thread_id}}
 
     for output in graph.stream(inputs, config):
@@ -29,5 +32,9 @@ def chat_endpoint(data: ChatModel):
     return {"generation": generation}
 
 
-if __name__ == "__main__":
+def main():
     uvicorn.run("spector.main:app", host="0.0.0.0", port=5000, proxy_headers=True)
+
+
+if __name__ == "__main__":
+    main()

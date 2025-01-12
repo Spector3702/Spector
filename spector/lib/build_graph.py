@@ -5,14 +5,14 @@ from langgraph.graph.message import add_messages
 from langchain_core.messages import BaseMessage
 from langgraph.checkpoint.memory import MemorySaver
 
-from lib.node.route_question import RouteQuestionNode
-from lib.node.web_search import WebSearchNode
-from lib.node.retrieve import RetrieveNode
-from lib.node.retrieval_grade import RagGraderNode
-from lib.node.route_rag import RouteRagNode
-from lib.node.rag_generate import RagGenerateNode
-from lib.node.grade_rag_generation import RagGenerationGraderNode
-from lib.node.plain_answer import PlainGenerationNode
+from spector.lib.node.route_question import RouteQuestionNode
+from spector.lib.node.web_search import WebSearchNode
+from spector.lib.node.retrieve import RetrieveNode
+from spector.lib.node.retrieval_grade import RagGraderNode
+from spector.lib.node.route_rag import RouteRagNode
+from spector.lib.node.rag_generate import RagGenerateNode
+from spector.lib.node.grade_rag_generation import RagGenerationGraderNode
+from spector.lib.node.plain_answer import PlainGenerationNode
 
 
 MODEL = 'gpt-4o-mini'
@@ -20,7 +20,8 @@ TEMPERATURE = 0
 
 
 class GraphState(TypedDict):
-    question : Annotated[Sequence[BaseMessage], add_messages]
+    messages : Annotated[Sequence[BaseMessage], add_messages]
+    question : str
     generation : str
     documents : List[str]
     
