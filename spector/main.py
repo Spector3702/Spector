@@ -1,5 +1,5 @@
 import os
-from spector.build_graph import build_graph
+from spector.lib.build_graph import build_graph
 
 
 os.environ["OPENAI_API_KEY"] = "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"
