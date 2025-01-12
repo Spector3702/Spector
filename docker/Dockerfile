@@ -1,6 +1,6 @@
 FROM python:3.13
 
-# COPY spector/ /app/spector/
+COPY spector/ /app/spector/
 COPY setup.py /app/setup.py
 WORKDIR /app
 

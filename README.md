@@ -14,6 +14,12 @@ Basically, my personal assistance
 ### K8s
 using [orbstack local k8s](https://docs.orbstack.dev/kubernetes/)
 
+```bash
+kubectl config use-context orbstack
+kubectl create namespace spector
+kubectl apply -f docker/deplyment.yaml -n spector
+```
+
 ### Server
 ```bash
 export OPENAI_API_KEY='{YOUR_OPENAI_API_KEY}'

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spector-chat-server
+  namespace: spector
+  labels:
+    app: spector-chat-server
+spec:
+  replicas: 1
+  # 建議使用 selector.matchLabels 與 template.metadata.labels 相呼應
+  selector:
+    matchLabels:
+      app: spector-chat-server
+  template:
+    metadata:
+      labels:
+        app: spector-chat-server
+    spec:
+      containers:
+        - name: spector-chat-server
+          image: spector3702/spector:latest
+          command:
+            - /bin/bash
+            - -c
+            - --
+          args:
+            - "run-server"
+          env:
+            - name: OPENAI_API_KEY
+              value: "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"
+            - name: TAVILY_API_KEY
+              value: "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"
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
