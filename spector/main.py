@@ -14,10 +14,7 @@ class ChatModel(BaseModel):
 
 @app.post("/chat")
 def chat_endpoint(data: ChatModel):
-    inputs = {
-        "question": data.question,
-        "messages": data.question
-    }
+    inputs = {"question": data.question}
     config = {"configurable": {"thread_id": data.thread_id}}
 
     for output in graph.stream(inputs, config):
