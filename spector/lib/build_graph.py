@@ -3,7 +3,7 @@ from typing import List, Sequence
 from langgraph.graph import END, StateGraph
 from langgraph.graph.message import add_messages
 from langchain_core.messages import BaseMessage
-from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.postgres import PostgresSaver
 
 from spector.lib.node.route_question import RouteQuestionNode
 from spector.lib.node.web_search import WebSearchNode
@@ -15,17 +15,17 @@ from spector.lib.node.grade_rag_generation import RagGenerationGraderNode
 from spector.lib.node.plain_answer import PlainGenerationNode
 
 
-MODEL = 'gpt-4o-mini'
+MODEL = "gpt-4o-mini"
 TEMPERATURE = 0
 
 
 class GraphState(TypedDict):
-    question : Annotated[Sequence[BaseMessage], add_messages]
-    generation : str
-    documents : List[str]
-    
+    question: Annotated[Sequence[BaseMessage], add_messages]
+    generation: str
+    documents: List[str]
 
-def build_graph():
+
+def build_graph(connection_pool):
     workflow = StateGraph(GraphState)
 
     web_search_node = WebSearchNode()
@@ -70,14 +70,15 @@ def build_graph():
         "rag_generate",
         rag_generation_grader.execute,
         {
-            "not supported": "rag_generate", # Hallucinations: re-generate
-            "not useful": "web_search", # Fails to answer question: fall-back to web-search
+            "not supported": "rag_generate",  # Hallucinations: re-generate
+            "not useful": "web_search",  # Fails to answer question: fall-back to web-search
             "useful": END,
         },
     )
     workflow.add_edge("plain_answer", END)
 
-    memory = MemorySaver()
-    graph = workflow.compile(checkpointer=memory)
+    postgres_saver = PostgresSaver(connection_pool)
+    postgres_saver.setup()
+    graph = workflow.compile(checkpointer=postgres_saver)
 
     return graph
