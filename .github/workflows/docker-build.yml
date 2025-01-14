@@ -29,3 +29,4 @@ jobs:
         file: docker/Dockerfile
         push: true
         tags: spector3702/spector:latest
+        platforms: linux/arm64
