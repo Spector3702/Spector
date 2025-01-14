@@ -28,16 +28,22 @@ kubectl create namespace spector
 ```
 
 ### Prometheus
-using [helm chart](https://artifacthub.io/packages/helm/prometheus-community/prometheus)
+- using [helm chart](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack)
+- tutorial: [Medium](https://blog.amis.com/kubernetes-operators-prometheus-3584edd72275)
+
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm install prometheus prometheus-community/prometheus --namespace spector
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
+
+# get secret
+kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.data.admin-user}" | base64 --decode
+echo
+kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode
+echo
 ```
-- host: `prometheus-server.spector.svc.cluster.local`
+- host: `kube-prometheus-stack-grafana.monitoring.svc.cluster.local`
 - server port: `80`
-- alertmanager port: `9093`
-- PushGateway port: `9091`
 
 
 ### PostgresSQL
