@@ -60,6 +60,10 @@ helm install my-release \
   oci://registry-1.docker.io/bitnamicharts/postgresql \
   --namespace spector \
   -f k8s/postgres-values.yaml
+
+# upgrade
+helm upgrade --namespace spector -f k8s/postgres-values.yaml \
+  my-release oci://registry-1.docker.io/bitnamicharts/postgresql
 ```
 Connection Info:
 - Host: `my-release-postgresql.spector.svc.cluster.local:5432`
