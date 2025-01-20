@@ -1875,7 +1875,8 @@ metrics:
     scrapeTimeout: ""
     ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
     ##
-    labels: {}
+    labels:
+      release: kube-prometheus-stack
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
