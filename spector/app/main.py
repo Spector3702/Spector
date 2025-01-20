@@ -1,9 +1,10 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from pydantic import BaseModel
 from psycopg_pool import ConnectionPool
 
 from spector.lib.build_graph import build_graph
+from spector.app.healthz_middleware import HealthzMiddleware
 
 
 connection_pool = ConnectionPool(
@@ -18,6 +19,7 @@ connection_pool = ConnectionPool(
 )
 graph = build_graph(connection_pool)
 app = FastAPI()
+app.add_middleware(HealthzMiddleware, connection_pool=connection_pool)
 
 
 class ChatModel(BaseModel):
@@ -42,8 +44,26 @@ def chat_endpoint(data: ChatModel):
     return {"generation": generation}
 
 
+@app.get("/health/liveness")
+def liveness_probe():
+    return Response(status_code=200)
+
+@app.get("/health/readiness")
+def readiness_probe():
+    try:
+        connection_pool.check()
+        return Response(status_code=200)
+    except Exception as e:
+        return Response(status_code=503)
+
+@app.get("/health/metrics")
+def prometheus_metrics():
+    # 这里可以返回应用程序的指标数据
+    return Response(content="your_prometheus_metrics", media_type="text/plain")
+
+
 def main():
-    uvicorn.run("spector.main:app", host="0.0.0.0", port=5000, proxy_headers=True)
+    uvicorn.run("spector.app.main:app", host="0.0.0.0", port=5000, proxy_headers=True)
 
 
 if __name__ == "__main__":

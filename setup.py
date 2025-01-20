@@ -9,7 +9,7 @@ setup(
     author="Spector3702",
     packages=find_packages(),
     entry_points={'console_scripts': [
-        'run-server = spector.main:main',
+        'run-server = spector.app.main:main',
     ]},
     include_package_data=True,
     package_data={
@@ -27,6 +27,7 @@ setup(
         'langgraph-checkpoint-postgres',
         'pydantic',
         'pypdf',
-        'uvicorn'
+        'uvicorn',
+        'prometheus-client'
     ]
 )
