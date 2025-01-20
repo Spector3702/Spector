@@ -19,6 +19,19 @@ spec:
       containers:
         - name: spector-chat-server
           image: spector3702/spector:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
           command:
             - /bin/bash
             - -c
