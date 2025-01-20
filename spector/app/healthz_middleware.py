@@ -1,8 +1,10 @@
+import requests
+import os
+
 from fastapi import FastAPI, Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 from psycopg_pool import ConnectionPool
 from prometheus_client import CollectorRegistry, Gauge, generate_latest
-import requests
 
 
 class HealthzMiddleware(BaseHTTPMiddleware):
@@ -27,7 +29,9 @@ class HealthzMiddleware(BaseHTTPMiddleware):
             openai_api_up = Gauge('openai_api_up', 'Check if OpenAI API is up', registry=registry)
 
             try:
-                response = requests.get("https://api.openai.com/v1/engines")
+                api_key = os.getenv("OPENAI_API_KEY")
+                headers = {"Authorization": f"Bearer {api_key}"}
+                response = requests.get("https://api.openai.com/v1/models", headers=headers)
                 if response.status_code == 200:
                     openai_api_up.set(1)
                 else:

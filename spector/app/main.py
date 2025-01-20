@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI, Response
+from fastapi import FastAPI
 from pydantic import BaseModel
 from psycopg_pool import ConnectionPool
 
@@ -42,24 +42,6 @@ def chat_endpoint(data: ChatModel):
         generation = output["plain_answer"]["generation"]
 
     return {"generation": generation}
-
-
-@app.get("/health/liveness")
-def liveness_probe():
-    return Response(status_code=200)
-
-@app.get("/health/readiness")
-def readiness_probe():
-    try:
-        connection_pool.check()
-        return Response(status_code=200)
-    except Exception as e:
-        return Response(status_code=503)
-
-@app.get("/health/metrics")
-def prometheus_metrics():
-    # 这里可以返回应用程序的指标数据
-    return Response(content="your_prometheus_metrics", media_type="text/plain")
 
 
 def main():
