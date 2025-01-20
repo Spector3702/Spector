@@ -69,6 +69,7 @@ Connection Info:
 - Host: `my-release-postgresql.spector.svc.cluster.local:5432`
 - User: postgres
 - Password: spector3702
+- [Grafana Dashboard](https://grafana.com/grafana/dashboards/9628-postgresql-database/)
 
 ### Server
 ```bash
