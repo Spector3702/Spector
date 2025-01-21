@@ -45,6 +45,7 @@ spec:
               value: "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"
           ports:
             - containerPort: 5000
+              name: metrics
           resources:
             requests:
               cpu: 250m

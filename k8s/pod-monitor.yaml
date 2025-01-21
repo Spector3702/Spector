@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: spector-chat-server-monitor
+  namespace: spector
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: spector-chat-server
+  podMetricsEndpoints:
+    - path: /health/metrics
+      port: metrics
+      interval: 30s
