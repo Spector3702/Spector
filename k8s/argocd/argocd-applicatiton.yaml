@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: spector-chat-server
+spec:
+  destination:
+    name: ""
+    namespace: spector
+    server: "https://kubernetes.default.svc"
+  source:
+    path: "k8s/spector"
+    repoURL: "git@github.com:Spector3702/Spector.git"
+    targetRevision: HEAD
+  project: spector
