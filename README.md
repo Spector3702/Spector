@@ -1,6 +1,6 @@
 # Spector
 Basically, my personal assistance
-todo: 讓 ArgoCD 加入 github 的 repo
+todo: 看看 ArgoCD 的 app 介面，接著實驗看看 CICD
 
 ## Features
 - League of Legend teacher
@@ -79,6 +79,7 @@ Connection Info:
 
 ### ArgoCD
 - [Doc](https://argo-cd.readthedocs.io/en/stable/getting_started/)
+- [Tutorial](https://ithelp.ithome.com.tw/articles/10248217)
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -100,6 +101,15 @@ argocd repo add git@github.com:Spector3702/Spector.git \
 
 # check
 argocd repo list
+
+# create application
+argocd app create -f k8s/argocd/argocd-applicatiton.yaml
+
+# check
+argocd app list
+
+# sync
+argocd app sync spector-chat-server
 ```
 
 
