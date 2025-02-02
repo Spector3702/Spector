@@ -31,5 +31,5 @@ jobs:
         context: .
         file: docker/Dockerfile
         push: true
-        tags: spector3702/spector:latest
+        tags: spector3702/spector:${{ github.sha }}
         platforms: linux/arm64

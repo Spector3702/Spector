@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: spector-chat-server
-          image: spector3702/spector:latest
+          image: spector3702/spector:b109c48b5b419f5059ad5d2110b6f28de30a8ee3
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
