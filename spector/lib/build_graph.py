@@ -65,16 +65,17 @@ def build_graph(connection_pool):
         },
     )
 
-    rag_generation_grader = RagGenerationGraderNode(MODEL, TEMPERATURE)
-    workflow.add_conditional_edges(
-        "rag_generate",
-        rag_generation_grader.execute,
-        {
-            "not supported": "rag_generate",  # Hallucinations: re-generate
-            "not useful": "web_search",  # Fails to answer question: fall-back to web-search
-            "useful": END,
-        },
-    )
+    # rag_generation_grader = RagGenerationGraderNode(MODEL, TEMPERATURE)
+    # workflow.add_conditional_edges(
+    #     "rag_generate",
+    #     rag_generation_grader.execute,
+    #     {
+    #         "not supported": "rag_generate",  # Hallucinations: re-generate
+    #         "not useful": "web_search",  # Fails to answer question: fall-back to web-search
+    #         "useful": END,
+    #     },
+    # )
+    workflow.add_edge("rag_generate", END)
     workflow.add_edge("plain_answer", END)
 
     postgres_saver = PostgresSaver(connection_pool)

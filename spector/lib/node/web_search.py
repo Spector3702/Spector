@@ -5,7 +5,9 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 class WebSearchNode():
     def __init__(self):
         self.web_search_tool = TavilySearchResults(
-            include_domains=["https://www.leagueoflegends.com/zh-tw/champions/"]
+            include_domains=[
+                "https://law.moj.gov.tw/"
+            ]
         )
 
     def execute(self, state):
@@ -15,6 +17,7 @@ class WebSearchNode():
         query = question[-1].content
 
         docs = self.web_search_tool.invoke({"query": query})
+        print("docs: ", docs)
         web_results = [Document(page_content=d["content"]) for d in docs]
 
         documents = documents + web_results
