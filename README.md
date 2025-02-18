@@ -1,11 +1,9 @@
 # Spector
 Basically, my personal assistance
-todo: 看看 ArgoCD 的 app 介面，接著實驗看看 CICD
 
 ## Features
-- League of Legend teacher
-- Love Adivisor
-- (To Be Continued...)
+- Taiwanese Law teacher
+- Love Advisor
 
 ## Structure
 
